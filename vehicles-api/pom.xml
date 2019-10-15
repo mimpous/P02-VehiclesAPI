@@ -16,7 +16,7 @@
     <description>A Restful API for vehicles</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>8</java.version>
     </properties>
 
     <dependencies>
@@ -95,7 +95,7 @@
                 <artifactId>cxf-codegen-plugin</artifactId>
                 <version>3.3.2</version>
                 <executions>
-                    <execution>
+                   <!--  <execution>
                         <id>generate-sources</id>
                         <phase>generate-sources</phase>
                         <configuration>
@@ -110,7 +110,7 @@
                         <goals>
                             <goal>wsdl2java</goal>
                         </goals>
-                    </execution>
+                    </execution> -->
                 </executions>
             </plugin>
         </plugins>
