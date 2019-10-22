@@ -21,6 +21,8 @@ import com.udacity.vehicles.domain.manufacturer.Manufacturer;
 import com.udacity.vehicles.service.CarService;
 import java.net.URI;
 import java.util.Collections;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -77,12 +79,13 @@ public class CarControllerTest {
     @Test
     public void createCar() throws Exception {
         Car car = getCar();
+        car.setId(0L);
         mvc.perform(
                 post(new URI("/cars"))
                         .content(json.write(car).getJson())
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .accept(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(status().isCreated());
+                        .andExpect(status().isCreated());
     }
 
     /**
@@ -96,7 +99,17 @@ public class CarControllerTest {
          *   the whole list of vehicles. This should utilize the car from `getCar()`
          *   below (the vehicle will be the first in the list).
          */
-
+    	List<Car> listOfCars=carService.list();
+    	Car car = listOfCars.get(0);
+    	String jsonString = json.write(car).getJson();
+    	
+    	System.out.println( jsonString );
+    	mvc.perform(
+                get(new URI("/cars/"))
+                 .accept(MediaType.APPLICATION_JSON_UTF8))
+    	 		 .andExpect(status().isOk())
+    	 		 .andExpect(content().json(jsonString));
+                         
     }
 
     /**
@@ -109,6 +122,17 @@ public class CarControllerTest {
          * TODO: Add a test to check that the `get` method works by calling
          *   a vehicle by ID. This should utilize the car from `getCar()` below.
          */
+    	Car car = carService.findById(1L);
+    	 
+    	String carAsJson =  json.write(car).getJson();
+//    	
+//    	this.mvc.perform(get("/getServerAlertFilters/v2v2v2/").
+//	            .andExpect(status().isOk())
+	           
+    	 
+    	
+    	
+    	
     }
 
     /**

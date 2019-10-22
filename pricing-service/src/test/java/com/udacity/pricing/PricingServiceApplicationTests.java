@@ -19,10 +19,13 @@ public class PricingServiceApplicationTests {
 	private MockMvc mockMvc;
 	
 	@Test
-	public void contextLoads() throws Exception {
-		 this.mockMvc.perform(get("/services/price?vehicleId=4")).andDo(print())
- 		.andExpect(status().isOk());
+	public void contextLoads() throws Exception { 
 	}
 
+	@Test
+	public void testVehicle() throws Exception {
+		 this.mockMvc.perform(get("/services/price?vehicleId=1")).andDo(print())
+ 		.andExpect(status().isOk());
+	}
 	
 }
