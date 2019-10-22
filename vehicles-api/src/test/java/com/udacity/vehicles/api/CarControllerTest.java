@@ -1,7 +1,6 @@
 package com.udacity.vehicles.api;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.hasSize; 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -10,9 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import com.udacity.vehicles.client.maps.MapsClient;
-import com.udacity.vehicles.client.prices.PriceClient;
+ 
 import com.udacity.vehicles.domain.Condition;
 import com.udacity.vehicles.domain.Location;
 import com.udacity.vehicles.domain.car.Car;
@@ -20,8 +17,7 @@ import com.udacity.vehicles.domain.car.Details;
 import com.udacity.vehicles.domain.manufacturer.Manufacturer;
 import com.udacity.vehicles.service.CarService;
 import java.net.URI;
-import java.util.Collections;
-import java.util.List;
+import java.util.Collections; 
 
 import org.junit.Before;
 import org.junit.Test;
@@ -54,11 +50,6 @@ public class CarControllerTest {
     @MockBean
     private CarService carService;
 
-    @MockBean
-    private PriceClient priceClient;
-
-    @MockBean
-    private MapsClient mapsClient;
 
     /**
      * Creates pre-requisites for testing, such as an example car.
@@ -99,16 +90,13 @@ public class CarControllerTest {
          *   the whole list of vehicles. This should utilize the car from `getCar()`
          *   below (the vehicle will be the first in the list).
          */
-    	List<Car> listOfCars=carService.list();
-    	Car car = listOfCars.get(0);
-    	String jsonString = json.write(car).getJson();
-    	
-    	System.out.println( jsonString );
+    	 
     	mvc.perform(
                 get(new URI("/cars/"))
                  .accept(MediaType.APPLICATION_JSON_UTF8))
     	 		 .andExpect(status().isOk())
-    	 		 .andExpect(content().json(jsonString));
+    	 		 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+    	 		 .andExpect(jsonPath("_embedded.carList", hasSize(1)) );
                          
     }
 
@@ -121,18 +109,15 @@ public class CarControllerTest {
         /**
          * TODO: Add a test to check that the `get` method works by calling
          *   a vehicle by ID. This should utilize the car from `getCar()` below.
-         */
-    	Car car = carService.findById(1L);
-    	 
-    	String carAsJson =  json.write(car).getJson();
-//    	
-//    	this.mvc.perform(get("/getServerAlertFilters/v2v2v2/").
-//	            .andExpect(status().isOk())
-	           
-    	 
-    	
-    	
-    	
+         */ 
+    	mvc.perform(
+                get(new URI("/cars/1"))
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+    			.andExpect(status().isOk())
+    			.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+    			.andExpect(jsonPath("id").value("1"))
+    			.andExpect(jsonPath("condition").value("USED"))
+    			.andExpect(jsonPath("details.body").value("sedan"));
     }
 
     /**
@@ -146,6 +131,12 @@ public class CarControllerTest {
          *   when the `delete` method is called from the Car Controller. This
          *   should utilize the car from `getCar()` below.
          */
+    	mvc.perform(
+                delete(new URI("/cars/1"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+    			.andExpect(status().isNoContent());
+    	 
     }
 
     /**
