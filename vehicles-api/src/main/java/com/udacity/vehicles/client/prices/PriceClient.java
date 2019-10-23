@@ -45,6 +45,7 @@ public class PriceClient {
 
         } catch (Exception e) {
             log.error("Unexpected error retrieving price for vehicle {}", vehicleId, e);
+            
         }
         return "(consult price)";
     }
